@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo</title>
+	<script src="./static/js/vue.js"></script>
+</head>
+<body>
+	<div id="app">
+	  {{ message }}{{message2}}
+	</div>
+
+	<div id="app2">
+		<p v-bind:title="message">On me please and play with me.</p>
+	</div>
+
+	<div id="app3">
+		<p v-if="seen">bye~in 1s</p>
+	</div>
+
+	<div id="app4">
+		<p>{{message}}</p>
+		<ol>
+			<li v-for="item in items">{{item.text}}</li>
+		</ol>
+	</div>
+
+	<div id="app-5">
+	  <p>{{ message }}</p>
+	  <button v-on:click="reverseMessage">reverse</button>
+	</div>
+
+	<div id="app6">
+	<p>app6</p>
+		<p v-once>{{message}}:v-once</p>
+		<p v>{{message}}</p>
+		<input v-model="message">
+	</div>
+
+	<div id="app-7">
+		<p>app7</p>
+	  <ol>
+	    <!-- 现在我们为每个todo-item提供待办项对象    -->
+	    <!-- 待办项对象是变量，即其内容可以是动态的 -->
+	    <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
+	  </ol>
+	</div>
+	
+	<div id="example"></div>
+
+	<!-- didnt work -->
+	<!-- <div v-if="Math.random() > 0.5">
+	  Now you see me
+	</div>
+	<div v-else>
+	  Now you don't
+	</div> -->
+
+	<p>app8</p>
+	<ul id="app8">
+	  <li v-for="(item, index) in items">
+	    {{ parentMessage }} - {{ index }} - {{ item.message }}
+	  </li>
+	</ul>
+
+	<!-- <div>
+	  <span v-for="n in 10">{{ n }}</span>
+	</div> -->
+
+	<div id="todo-list-example">
+	  <input
+	    v-model="newTodoText"
+	    v-on:keyup.enter="addNewTodo"
+	    placeholder="Add a todo"
+	  >
+	  <ul>
+	    <li
+	      is="todo-item"
+	      v-for="(todo, index) in todos"
+	      v-bind:title="todo"
+	      v-on:remove="todos.splice(index, 1)"
+	    ></li>
+	  </ul>
+	</div>
+
+	<div id="app9">
+	  <button v-on:click="counter += 1">增加 1</button>
+	  <p>这个按钮被点击了 {{ counter }} 次。</p>
+	</div>
+
+	<div id="example-2">
+	  <!-- `greet` 是在下面定义的方法名 -->
+	  <button v-on:click="greet">Greet</button>
+	</div>
+
+	<input type="checkbox" id="checkbox" v-model="checked">
+	<label for="checkbox">{{ checked }}</label>
+</body>
+<script>
+	var app = new Vue({
+	  el: '#app',
+	  data: {
+	    message: 'Vue is awesome!',
+	    message2: '!'
+	  }
+	})
+	setTimeout(function(){
+		app.message2 = '--Hi!'
+	},500)
+
+	var app2 = new Vue({
+		el: '#app2',
+		data: {
+			message: 'Loaded at:'+ new Date()
+		}
+	})
+
+	var app3 = new Vue({
+		el:'#app3',
+		data: {
+			seen: true
+		}
+	})
+	setTimeout(function(){
+		app3.seen = false
+	},1000)
+
+	var app4 = new Vue({
+		el:'#app4',
+		data:{
+			message:'Todos:',
+			items:[
+				{text:'Gain Vue.'},
+				{text:'Contact tseng.'},
+				{text:'Review at night.'}
+			]
+		}
+	})
+	app4.items.push({text:'I was pushed in.'})
+
+
+	var app5 = new Vue({
+	  el: '#app-5',
+	  data: {
+	    message: 'Hello Vue.js!'
+	  },
+	  methods: {
+	  	reverseMessage: function(){
+	  		this.message = this.message.split('').reverse().join('')
+	  	}
+	  	// reverseMessage:(message)=>message.split('').reverse(.join(''))
+	  }
+	})
+
+	var app6 = new Vue({
+		el:'#app6',
+		data:{
+			message:'Hello tot'
+		}
+	})
+
+
+	Vue.component('todo-item', {
+	  props: ['todo'],
+	  template: '<li>{{ todo.text }}</li>'
+	})
+	var app7 = new Vue({
+	  el: '#app-7',
+	  data: {
+	    groceryList: [
+	      { text: 'text1' },
+	      { text: 'text2' },
+	      { text: 'text3' }
+	    ]
+	  }
+	})
+
+	var data = { a: 1 }
+	var vm = new Vue({
+	  el: '#example',
+	  data: data
+	})
+	// alert(vm.$data === data)
+	// vm.$el === document.getElementById('example')
+
+
+	var app8 = new Vue({
+	  el: '#app8',
+	  data: {
+	    parentMessage: 'Parent',
+	    items: [
+	      { message: 'Foo' },
+	      { message: 'Bar' }
+	    ]
+	  }
+	})
+
+	
+	Vue.component('todo-item', {
+	  template: '\
+	    <li>\
+	      {{ title }}\
+	      <button v-on:click="$emit(\'remove\')">X</button>\
+	    </li>\
+	  ',
+	  props: ['title']
+	})
+	new Vue({
+	  el: '#todo-list-example',
+	  data: {
+	    newTodoText: '',
+	    todos: [
+	      'Do the dishes',
+	      'Take out the trash',
+	      'Mow the lawn'
+	    ]
+	  },
+	  methods: {
+	    addNewTodo: function () {
+	      this.todos.push(this.newTodoText)
+	      this.newTodoText = ''
+	    }
+	  }
+	})
+
+	var app9 = new Vue({
+		el:'#app9',
+		data:{
+			counter:0
+		}
+	})
+
+	var example2 = new Vue({
+	  el: '#example-2',
+	  data: {
+	    name: 'Vue.js'
+	  },
+	  // 在 `methods` 对象中定义方法
+	  methods: {
+	    greet: function (event) {
+	      // `this` 在方法里指当前 Vue 实例
+	      alert('Hello ' + this.name + '!')
+	      // `event` 是原生 DOM 事件
+	      alert(event.target.tagName)
+	    }
+	  }
+	})
+	// alert(example2.greet())
+
+</script>
+</html>
