@@ -1,17 +1,19 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+    <!-- <img src="./assets/logo.png"> -->
+    <!-- <hello></hello> -->
+    <todolist></todolist>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+// import Hello from './components/Hello'
+import Todolist from './components/Todolist'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    Todolist
   }
 }
 </script>
@@ -23,6 +25,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 160px;
 }
 </style>
